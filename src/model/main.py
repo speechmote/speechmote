@@ -1,24 +1,27 @@
+def transcribe_file(speech_file):
+    """Transcribe the given audio file."""
+    from google.cloud import speech
+    import io
 
-# Imports the Google Cloud client library
-from google.cloud import speech
+    client = speech.SpeechClient()
 
+    with io.open(speech_file, "rb") as audio_file:
+        content = audio_file.read()
 
-# Instantiates a client
-client = speech.SpeechClient()
+    audio = speech.RecognitionAudio(content=content)
+    config = speech.RecognitionConfig(
+        encoding=speech.RecognitionConfig.AudioEncoding.FLAC,
+        sample_rate_hertz=48000,
+        audio_channel_count=2,
+        language_code="en-US",
+    )
 
-# The name of the audio file to transcribe
-gcs_uri = "gs://cloud-samples-data/speech/brooklyn_bridge.raw"
+    response = client.recognize(config=config, audio=audio)
 
-audio = speech.RecognitionAudio(uri=gcs_uri)
+    # Each result is for a consecutive portion of the audio. Iterate through
+    # them to get the transcripts for the entire audio file.
+    for result in response.results:
+        # The first alternative is the most likely one for this portion.
+        print(u"Transcript: {}".format(result.alternatives[0].transcript))
 
-config = speech.RecognitionConfig(
-    encoding=speech.RecognitionConfig.AudioEncoding.LINEAR16,
-    sample_rate_hertz=16000,
-    language_code="en-US",
-)
-
-# Detects speech in the audio file
-response = client.recognize(config=config, audio=audio)
-
-for result in response.results:
-    print("Transcript: {}".format(result.alternatives[0].transcript))
+transcribe_file("src/model/sample.flac")
