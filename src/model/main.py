@@ -58,4 +58,4 @@ def tokenize(filePath):
 
     return ' '.join(token)
 
-print(transcribe_file("src/model/sample.wav"))
+# print(transcribe_file("src/model/sample.wav"))

@@ -1,4 +1,9 @@
 FROM python:3.9
-COPY . /src/model
+
+COPY ./requirements.txt /requirements.txt
+
+RUN pip install --no-cache-dir --upgrade -r requirements.txt
+
+COPY ./src/model /app
 
 ENV GOOGLE_APPLICATION_CREDENTIALS=src/model/speech-key.json
