@@ -1,0 +1,48 @@
+{
+    "telemetry.machineId": "512c12299b6ca49577dc48e5be52bb9fedca0af370c005bf29bf2d37afbf675c",
+    "openedPathsList": {
+        "entries": [
+            {
+                "folderUri": "file:///c%3A/Users/Oankar%20Patil/Documents/GitHub/speechmote/src/extension"
+            }
+        ]
+    },
+    "theme": "vs-dark",
+    "themeBackground": "#1e1e1e",
+    "windowSplash": {
+        "baseTheme": "vs-dark",
+        "colorInfo": {
+            "foreground": "#cccccc",
+            "background": "#1e1e1e",
+            "editorBackground": "#1e1e1e",
+            "titleBarBackground": "#3c3c3c",
+            "activityBarBackground": "#333333",
+            "sideBarBackground": "#252526",
+            "statusBarBackground": "#007acc",
+            "statusBarNoFolderBackground": "#68217a"
+        },
+        "layoutInfo": {
+            "sideBarSide": "left",
+            "editorPartMinWidth": 220,
+            "titleBarHeight": 30,
+            "activityBarWidth": 48,
+            "sideBarWidth": 256,
+            "statusBarHeight": 22,
+            "windowBorder": false
+        }
+    },
+    "windowsState": {
+        "lastActiveWindow": {
+            "folder": "file:///c%3A/Users/Oankar%20Patil/Documents/GitHub/speechmote/src/extension",
+            "backupPath": "C:\\Users\\Oankar Patil\\Documents\\GitHub\\speechmote\\src\\extension\\'.'\\Backups\\3a048124b781e2fa09444380c5818172",
+            "uiState": {
+                "mode": 1,
+                "x": 128,
+                "y": 0,
+                "width": 1024,
+                "height": 680
+            }
+        },
+        "openedWindows": []
+    }
+}
