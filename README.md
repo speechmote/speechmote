@@ -4,7 +4,7 @@ A Speech-to-Emote translation Google Chrome Extension. Built using Python and Ja
 ## Technologies Used
 - JavaScript   
     - Yarn
-    - Node.JS
+    - Node.js
 - Python
     - FastAPI
     - Google Cloud Speech-to-Text
