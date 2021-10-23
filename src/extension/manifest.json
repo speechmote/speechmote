@@ -1,0 +1,6 @@
+{
+    "name": "Speechmote",
+    "description": "Speech to emoji extension for assistive technology users.",
+    "version": "1.0",
+    "manifest_version": 3
+}
