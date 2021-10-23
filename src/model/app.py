@@ -30,4 +30,4 @@ async def read_item(fileName):
 
 @app.get("/test/{item_id}")
 async def test_read(item_id: str):
-    return {"recieved: " + item_id}
+    return {"recieved:" + item_id}

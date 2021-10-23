@@ -1,3 +1,7 @@
+//import axios from "node_modules/axios";
+const apiURL = "https://speechmote-329915.ue.r.appspot.com/test/";
+const proxyURL = "http://localhost:8010/proxy";
+
 var MediaStreamRecorder = require('msr');
 
 var mediaConstraints = {
@@ -28,17 +32,13 @@ function onMediaError(e) {
     console.error('media error', e);
 }
 
-function record(info,tab) {
+async function record(info,tab) {
     if (info.menuItemId == "") {
         console.log("yay!");
     }
     console.log("Record button clicked!"); //do a sound or something here 
     console.log(info.frameId);
-    fetch('https://speechmote-329915.ue.r.appspot.com/').then(response => {
-            console.log(response.json());
-    });
-
-    text = ":pepega: :kekw:";
+    text = await testapi()
 
     chrome.tabs.query({active: true, lastFocusedWindow:true}, function(tabs) {
         url = tabs[0].url;
@@ -47,6 +47,7 @@ function record(info,tab) {
         //navigator.getUserMedia(mediaConstraints, onMediaSuccess, onMediaError); //record audio
         //make api call here
         //call printText() with the returned text
+        printText(text, tab, info);
     });
 }
 
@@ -60,10 +61,21 @@ function matchURL(url) {
     }
 }
 
-function printText(text) {
+function printText(text, tab, info) {
     chrome.tabs.executeScript(tab.id, {
         frameId: info.frameId || 0,
         matchAboutBlank: true,
         code: `document.execCommand('insertText', false, ${JSON.stringify(text)})`,
     });
+}
+async function testapi() {
+
+
+    var test = await fetch(proxyURL + "/kekwyepme").then(response => response.text());
+    // await fetch(proxyURL)
+    // .then(test = data=>{return data.text()})
+    // .then(res=>{console.log(res)})
+    // .then(error=>console.log(error));
+    // console.log("test's value is: ", test);
+    return test;
 }
