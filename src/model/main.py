@@ -1,6 +1,6 @@
 from google.cloud import speech
 import io
-import nltk
+import spacy
 
 def transcribe_file(speech_file):
     """Transcribe the given audio file."""
@@ -20,16 +20,26 @@ def transcribe_file(speech_file):
 
     response = client.recognize(config=config, audio=audio)
 
-    sentence = []
+    sentence = ""
 
     # Each result is for a consecutive portion of the audio. Iterate through
     # them to get the transcripts for the entire audio file.
     for result in response.results:
         # The first alternative is the most likely one for this portion.
-        sentence.append(format(result.alternatives[0].transcript))
+        sentence = format(result.alternatives[0].transcript)
 
     return sentence
 
 
 sentence = transcribe_file("src/model/sample.wav")
 
+nlp = spacy.load("en_core_web_sm")
+doc = nlp(sentence)
+token = []
+for t in doc:
+    if t.text[0] == "\'":
+        token[-1] = token[-1] + t.text
+    else:
+        token.append(t.text)
+
+print(token)
