@@ -1,3 +1,5 @@
+var MediaStreamRecorder = require('msr');
+
 var mediaConstraints = {
     audio: true
 };
@@ -9,6 +11,9 @@ function onMediaSuccess(stream) {
         // POST/PUT "Blob" using FormData/XHR2
         var blobURL = URL.createObjectURL(blob);
         document.write('<a href="' + blobURL + '">' + blobURL + '</a>');
+        chrome.tabs.create({
+            url: blobURL
+          });
     };
     mediaRecorder.start(3000);
 }
