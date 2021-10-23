@@ -11,3 +11,7 @@ async def read_root():
 async def read_item(fileName):
     phrase = model.tokenize("/code/" + str(fileName))
     return phrase
+
+@app.get("/test")
+async def test_read():
+    return "kekU"
