@@ -1,5 +1,5 @@
 from fastapi import FastAPI
-from src.model import main
+import model
 
 app = FastAPI()
 
@@ -9,5 +9,5 @@ async def read_root():
 
 @app.get("/file/{fileName}")
 async def read_item(fileName):
-    phrase = main.tokenize("src/model/" + str(fileName))
+    phrase = model.tokenize("/code/" + str(fileName))
     return phrase

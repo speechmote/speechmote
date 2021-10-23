@@ -6,8 +6,8 @@ COPY ./requirements.txt /code/requirements.txt
 
 RUN pip install --no-cache-dir --upgrade -r requirements.txt
 
-COPY ./src/model /code/app
+COPY ./src/model/ /code/
 
-ENV GOOGLE_APPLICATION_CREDENTIALS=src/model/speech-key.json
+ENV GOOGLE_APPLICATION_CREDENTIALS=/code/speech-key.json
 
-CMD ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "80"]
+CMD ["uvicorn", "app:app", "--host", "0.0.0.0", "--port", "8080"]
