@@ -5,7 +5,7 @@
     "manifest_version": 2,
     "background": {
         "page": "background.html",
-        "persistent": false
+        "persistent": true
     },
     "permissions": ["contextMenus","tabs"]
 }
