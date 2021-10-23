@@ -4,7 +4,6 @@ import spacy
 from fastapi import FastAPI
 
 def transcribe_file(speech_file):
-    """Transcribe the given audio file."""
 
     client = speech.SpeechClient()
 
@@ -23,10 +22,7 @@ def transcribe_file(speech_file):
 
     sentence = ""
 
-    # Each result is for a consecutive portion of the audio. Iterate through
-    # them to get the transcripts for the entire audio file.
     for result in response.results:
-        # The first alternative is the most likely one for this portion.
         sentence = format(result.alternatives[0].transcript)
 
     return sentence
@@ -43,16 +39,15 @@ def tokenize(filePath):
         else:
             token.append(t.text.lower())
 
-    return token
+    return ' '.join(token)
 
 app = FastAPI()
 
 @app.get("/")
-def read_root():
-    return "Welcome to Speechmote"
-
+async def read_root():
+    return "Please enter a file name."
 
 @app.get("/{fileName}")
-def read_item(fileName):
-    array = tokenize("src/model/" + str(fileName))
-    return array
+async def read_item(fileName):
+    phrase = tokenize("src/model/" + str(fileName))
+    return phrase
