@@ -36,11 +36,7 @@ async def test_read(item_id: str):
 
 @app.post("/uploadfile/")
 async def create_upload_file(file: UploadFile = File(...)):
-    if file is None:
-        return "Empty"
-    upload_blob("speechmote-329915.appspot.com", file, "sample.wav")
-    phrase = model.tokenize("/code/sample.wav")
-    return phrase
+    return {"filename": file.filename}
 
 def upload_blob(bucket_name, source_file_name, destination_blob_name):
     """Uploads a file to the bucket."""
