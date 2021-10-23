@@ -1,7 +1,6 @@
 from google.cloud import speech
 import io
 import spacy
-from typing import Optional
 from fastapi import FastAPI
 
 def transcribe_file(speech_file):
@@ -40,9 +39,9 @@ def tokenize(filePath):
     token = []
     for t in doc:
         if t.text[0] == "\'":
-            token[-1] = token[-1] + t.text
+            token[-1] = token[-1] + t.text.lower()
         else:
-            token.append(t.text)
+            token.append(t.text.lower())
 
     return token
 
@@ -50,11 +49,10 @@ app = FastAPI()
 
 @app.get("/")
 def read_root():
-    print("kekw")
-    return {"Hello": "World"}
+    return "Welcome to Speechmote"
 
 
 @app.get("/{fileName}")
 def read_item(fileName):
     array = tokenize("src/model/" + str(fileName))
-    return {"tokens": array}
+    return array
