@@ -1,7 +1,9 @@
+from google.cloud import speech
+import io
+import nltk
+
 def transcribe_file(speech_file):
     """Transcribe the given audio file."""
-    from google.cloud import speech
-    import io
 
     client = speech.SpeechClient()
 
@@ -18,10 +20,16 @@ def transcribe_file(speech_file):
 
     response = client.recognize(config=config, audio=audio)
 
+    sentence = []
+
     # Each result is for a consecutive portion of the audio. Iterate through
     # them to get the transcripts for the entire audio file.
     for result in response.results:
         # The first alternative is the most likely one for this portion.
-        print(u"Transcript: {}".format(result.alternatives[0].transcript))
+        sentence.append(format(result.alternatives[0].transcript))
 
-transcribe_file("src/model/sample.wav")
+    return sentence
+
+
+sentence = transcribe_file("src/model/sample.wav")
+
