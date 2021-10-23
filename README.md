@@ -2,13 +2,17 @@
 A Speech-to-Emote translation Google Chrome Extension. Built using Python and JavaScript. Project for hackGT 8.
 
 ## Technologies Used
-- JavaScript   
+- Frontend (Extension)
+    - JavaScript
+    - RecordRTC
+    - Browserify
     - Yarn
     - Node.js
-- Python
+- Backend (Model)
+    - Python
     - FastAPI
     - Google Cloud Speech-to-Text
-    - Spacy
-- Deployment
+    - Google Cloud Natural Language
+- Server (Deployment)
     - Docker
-    - Google Cloud
+    - Google Cloud Compute Engine
