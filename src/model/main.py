@@ -51,3 +51,8 @@ async def read_root():
 async def read_item(fileName):
     phrase = tokenize("src/model/" + str(fileName))
     return phrase
+
+@app.get("/file/{fileName}")
+async def read_item(fileName):
+    phrase = tokenize(str(fileName))
+    return phrase
