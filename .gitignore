@@ -132,3 +132,6 @@ speech-key.json
 *.mp3
 *.flac
 *.wav
+
+# Stupid UNIX files
+.DS_Store
