@@ -1,6 +1,8 @@
 from google.cloud import speech
 import io
 import spacy
+from typing import Optional
+from fastapi import FastAPI
 
 def transcribe_file(speech_file):
     """Transcribe the given audio file."""
@@ -30,16 +32,29 @@ def transcribe_file(speech_file):
 
     return sentence
 
+def tokenize(filePath): 
+    sentence = transcribe_file(filePath)
 
-sentence = transcribe_file("src/model/sample.wav")
+    nlp = spacy.load("en_core_web_sm")
+    doc = nlp(sentence)
+    token = []
+    for t in doc:
+        if t.text[0] == "\'":
+            token[-1] = token[-1] + t.text
+        else:
+            token.append(t.text)
 
-nlp = spacy.load("en_core_web_sm")
-doc = nlp(sentence)
-token = []
-for t in doc:
-    if t.text[0] == "\'":
-        token[-1] = token[-1] + t.text
-    else:
-        token.append(t.text)
+    return token
 
-print(token)
+app = FastAPI()
+
+@app.get("/")
+def read_root():
+    print("kekw")
+    return {"Hello": "World"}
+
+
+@app.get("/{fileName}")
+def read_item(fileName):
+    array = tokenize("src/model/" + str(fileName))
+    return {"tokens": array}
