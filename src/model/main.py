@@ -1,7 +1,6 @@
 from google.cloud import speech
 import io
 import spacy
-from fastapi import FastAPI
 
 def transcribe_file(speech_file):
 
@@ -51,19 +50,3 @@ def tokenize(filePath):
     token = emoteReplace(token)
 
     return ' '.join(token)
-
-app = FastAPI()
-
-@app.get("/")
-async def read_root():
-    return "Please enter a file name."
-
-@app.get("/{fileName}")
-async def read_item(fileName):
-    phrase = tokenize("src/model/" + str(fileName))
-    return phrase
-
-@app.get("/file/{fileName}")
-async def read_item(fileName):
-    phrase = tokenize(str(fileName))
-    return phrase
