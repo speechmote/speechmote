@@ -1,5 +1,5 @@
 //import axios from "node_modules/axios";
-const apiURL = "https://speechmote-329915.ue.r.appspot.com/test/painthtisisfeoijawfeio";
+const apiURL = "https://speechmote-329915.ue.r.appspot.com/test/";
 const proxyURL = "http://localhost:8010/proxy";
 
 var MediaStreamRecorder = require('msr');
@@ -69,7 +69,9 @@ function printText(text, tab, info) {
     });
 }
 async function testapi() {
-    var test = await fetch(proxyURL).then(response => response.text());
+
+
+    var test = await fetch(proxyURL + "/kekwyepme").then(response => response.text());
     // await fetch(proxyURL)
     // .then(test = data=>{return data.text()})
     // .then(res=>{console.log(res)})
