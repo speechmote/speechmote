@@ -27,6 +27,14 @@ def transcribe_file(speech_file):
 
     return sentence
 
+#TODO: hardReplace will search, using a database, words that are always an emoji and immediately flag for replacement.
+def hardReplace(token):
+    return token
+
+#TODO: emoteReplace will use an ML model to semantically flag words that can be replaced with an emote.
+def emoteReplace(token):
+    return token
+
 def tokenize(filePath): 
     sentence = transcribe_file(filePath)
 
@@ -38,6 +46,9 @@ def tokenize(filePath):
             token[-1] = token[-1] + t.text.lower()
         else:
             token.append(t.text.lower())
+
+    token = hardReplace(token)
+    token = emoteReplace(token)
 
     return ' '.join(token)
 
