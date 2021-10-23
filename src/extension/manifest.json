@@ -2,10 +2,9 @@
     "name": "Speechmote",
     "description": "Speech to emoji extension for assistive technology users.",
     "version": "1.0",
-    "manifest_version": 3,
+    "manifest_version": 2,
     "background": {
-        "scripts": ["background.js"],
-        "persistent": true
+        "scripts": ["background.js"]
     },
     "permissions": ["contextMenus"]
 }
