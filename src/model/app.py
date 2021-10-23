@@ -1,4 +1,5 @@
 from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
 import model
 from fastapi.middleware.cors import CORSMiddleware
 
@@ -6,8 +7,9 @@ app = FastAPI()
 
 origins = [
     "http://localhost",
-    "http://localhost:8000"
+    "http://localhost:8000",
     "http://localhost:8080",
+    "https://speechmote-329915.ue.r.appspot.com",
 ]
 
 app.add_middleware(
@@ -29,4 +31,4 @@ async def read_item(fileName):
 
 @app.get("/test/{item_id}")
 async def test_read(item_id: str):
-    return "recieved: " + item_id
+    return {"recieved:" + item_id}
