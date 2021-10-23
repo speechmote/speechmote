@@ -1,6 +1,5 @@
-from google.cloud import speech
+from google.cloud import speech, language_v1
 import io
-import spacy
 
 def transcribe_file(speech_file):
 
@@ -37,14 +36,22 @@ def emoteReplace(token):
 def tokenize(filePath): 
     sentence = transcribe_file(filePath)
 
-    nlp = spacy.load("en_core_web_sm")
-    doc = nlp(sentence)
+    client = language_v1.LanguageServiceClient()
+    type_ = language_v1.Document.Type.PLAIN_TEXT
+    language = "en"
+    document = {"content": sentence, "type_": type_, "language": language}
+
+    # Available values: NONE, UTF8, UTF16, UTF32
+    encoding_type = language_v1.EncodingType.UTF8
+
+    response = client.analyze_syntax(request = {'document': document, 'encoding_type': encoding_type})
     token = []
-    for t in doc:
-        if t.text[0] == "\'":
-            token[-1] = token[-1] + t.text.lower()
+    for t in response.tokens:
+        text = t.text.content
+        if text[0] == "\'":
+            token[-1] = token[-1] + text.lower()
         else:
-            token.append(t.text.lower())
+            token.append(text.lower())
 
     token = hardReplace(token)
     token = emoteReplace(token)
