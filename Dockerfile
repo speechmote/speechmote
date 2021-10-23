@@ -1,3 +1,4 @@
-FROM ubuntu:20.04
+FROM python:3.9
 COPY . /src/model
-CMD python /src/model/main.py
+
+ENV GOOGLE_APPLICATION_CREDENTIALS=src/model/speech-key.json

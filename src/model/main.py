@@ -50,3 +50,5 @@ def tokenize(filePath):
     token = emoteReplace(token)
 
     return ' '.join(token)
+
+print(transcribe_file("src/model/sample.wav"))
