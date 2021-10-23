@@ -1,3 +1,6 @@
+//import axios from "node_modules/axios";
+const api = "https://speechmote-329915.ue.r.appspot.com/test/iwanttodie";
+
 var MediaStreamRecorder = require('msr');
 
 var mediaConstraints = {
@@ -34,10 +37,7 @@ function record(info,tab) {
     }
     console.log("Record button clicked!"); //do a sound or something here 
     console.log(info.frameId);
-    fetch('https://speechmote-329915.ue.r.appspot.com/').then(response => {
-            console.log(response.json());
-    });
-
+    testapi();
     text = ":pepega: :kekw:";
 
     chrome.tabs.query({active: true, lastFocusedWindow:true}, function(tabs) {
@@ -66,4 +66,7 @@ function printText(text) {
         matchAboutBlank: true,
         code: `document.execCommand('insertText', false, ${JSON.stringify(text)})`,
     });
+}
+async function testapi() {
+    fetch(api).then(data=>{console.log(data.json())}).then(res=>{console.log(res)})
 }
