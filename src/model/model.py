@@ -1,5 +1,6 @@
 from google.cloud import speech, language_v1
 import io
+import requests
 
 def transcribe_file(speech_file):
 
@@ -25,16 +26,49 @@ def transcribe_file(speech_file):
 
     return sentence
 
-#TODO: hardReplace will search, using a database, words that are always an emoji and immediately flag for replacement.
-def hardReplace(token):
-    return token
+def alwaysEmotes(token):
+    client = language_v1.LanguageServiceClient()
+
+    type_ = language_v1.Document.Type.PLAIN_TEXT
+    language = "en"
+    document = {"content": token, "type_": type_, "language": language}
+
+    # Available values: NONE, UTF8, UTF16, UTF32
+    encoding_type = language_v1.EncodingType.UTF8
+
+    response = client.analyze_entities(request = {'document': document, 'encoding_type': encoding_type})
+    tokens = []
+    for entity in response.entities:
+        tokens.append(entity.name)
+    return tokens
 
 #TODO: emoteReplace will use an ML model to semantically flag words that can be replaced with an emote.
 def emoteReplace(token):
     return token
 
+def getEmojiCode(token): 
+    emojis = {}
+    for t in token:
+        URL = "https://emoji-api.com/emojis?search=" + str(t) + "&access_key=66f8208d04c5039148d7be92bd42549a09d6bc38"
+        r = requests.get(url = URL)
+        data = r.json()
+        if data == None:
+            emojis[t] = (":" + t + ":")
+        else:
+            emojis[t] = (data[0]['character'])
+    return emojis
+
+def replace(emojis, tokens):
+    for emoji in emojis.keys():
+        if emoji in tokens:
+            emoteIndex = tokens.index(emoji)
+            tokens[emoteIndex] = emojis[emoji]
+    return tokens
+
 def tokenize(filePath): 
     sentence = transcribe_file(filePath)
+    tokens = alwaysEmotes(sentence)
+    emojis = getEmojiCode(tokens)
 
     client = language_v1.LanguageServiceClient()
     type_ = language_v1.Document.Type.PLAIN_TEXT
@@ -45,17 +79,15 @@ def tokenize(filePath):
     encoding_type = language_v1.EncodingType.UTF8
 
     response = client.analyze_syntax(request = {'document': document, 'encoding_type': encoding_type})
-    token = []
+    sentenceTokens = []
     for t in response.tokens:
         text = t.text.content
         if text[0] == "\'":
-            token[-1] = token[-1] + text.lower()
+            sentenceTokens[-1] = sentenceTokens[-1] + text.lower()
         else:
-            token.append(text.lower())
+            sentenceTokens.append(text.lower())
 
-    token = hardReplace(token)
-    token = emoteReplace(token)
+    formatted = replace(emojis, sentenceTokens)
+    return ' '.join(formatted)
 
-    return ' '.join(token)
-
-# print(transcribe_file("src/model/sample.wav"))
+print(tokenize("src/model/sample.wav"))
