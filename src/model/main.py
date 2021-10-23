@@ -10,9 +10,9 @@ def transcribe_file(speech_file):
 
     audio = speech.RecognitionAudio(content=content)
     config = speech.RecognitionConfig(
-        encoding=speech.RecognitionConfig.AudioEncoding.FLAC,
-        sample_rate_hertz=48000,
+        encoding=speech.RecognitionConfig.AudioEncoding.LINEAR16,
         audio_channel_count=2,
+        sample_rate_hertz=48000,
         language_code="en-US",
     )
 
@@ -24,4 +24,4 @@ def transcribe_file(speech_file):
         # The first alternative is the most likely one for this portion.
         print(u"Transcript: {}".format(result.alternatives[0].transcript))
 
-transcribe_file("src/model/sample.flac")
+transcribe_file("src/model/sample.wav")

@@ -131,3 +131,4 @@ dmypy.json
 speech-key.json
 *.mp3
 *.flac
+*.wav
