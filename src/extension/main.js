@@ -3,9 +3,34 @@ const proxyURL = "http://localhost:8010/proxy";
 
 var MediaStreamRecorder = require('msr');
 
+// chrome.runtime.executeScript({
+//     file: "runner.js",
+// }, () => chrome.runtime.lastError);
+
 var mediaConstraints = {
-    audio: true
+    audio: true,
+    video: false
 };
+
+var working = true;
+
+// chrome.extension.sendMessage({greeting: "kekw"}, function(response) {
+//     if (response.farewell === "lul") {
+//         working = true;
+//         console.log("farewell");
+//     }
+// });
+
+// chrome.extension.onMessage.addListener(
+//     function(request, sender, sendResponse) {
+//         if (sender.farewell === "kekw") {
+//             working = true;
+//             sendResponse({farewell: "yepME"});
+//             console.log("in listener");
+//         }
+//         return true;
+//     }
+// );
 
 chrome.contextMenus.create({
     title: "Record Audio", 
@@ -29,7 +54,6 @@ function onMediaSuccess(stream) {
         a.download = 'send.wav';
         a.click();
         console.log("wav saved to local file");
-
     };
     mediaRecorder.start(1000);
     chrome.commands.onCommand.addListener( async function (command) {
@@ -39,30 +63,38 @@ function onMediaSuccess(stream) {
             console.log("recorder stopped");
         }
     });
+    console.log(chunks);
     
 }
 function onMediaError(e) {
-    console.error('media error', e);
+    console.error('media error', e, e.stack());
 }
 
 async function record(info,tab) {
-    if (info.menuItemId == "") {
-        console.log("yay!");
-    }
-    console.log("Record button clicked!"); //do a sound or something here 
-    console.log(info.frameId);
-    //text = await testapi()
-    text = await testapi();
+    var title = chrome.runtime.getURL("content.js");
+    chrome.tabs.executeScript({file: title}, () => chrome.runtime.lastError);
+    console.log("lmao");
+    if (working == true) {
+        if (info.menuItemId == "") {
+            console.log("yay!");
+        }
+        console.log("Record button clicked!"); //do a sound or something here 
+        console.log(info.frameId);
+        //text = await testapi()
+        //text = await testapi();
+        navigator.mediaDevices.getUserMedia(mediaConstraints, onMediaSuccess, onMediaError); //record audio
+        chrome.tabs.query({active: true, lastFocusedWindow:true}, function(tabs) {
+            url = tabs[0].url;
+            emoteType = matchURL(url);
+            console.log(emoteType);
+            
+            //make api call here
+            //call printText() with the returned text
+            //printText(text, tab, info);
+        });
 
-    chrome.tabs.query({active: true, lastFocusedWindow:true}, function(tabs) {
-        url = tabs[0].url;
-        emoteType = matchURL(url);
-        console.log(emoteType);
-        //navigator.getUserMedia(mediaConstraints, onMediaSuccess, onMediaError); //record audio
-        //make api call here
-        //call printText() with the returned text
-        printText(text, tab, info);
-    });
+        console.log("In record");
+    }
 }
 
 function matchURL(url) {
@@ -91,8 +123,7 @@ async function testapi() {
     // console.log("test's value is: ", test);
     return test;
 }
-async function formapi() {
-    files = files
+async function formapi(files) {
     formData = new FormData();
     for (let i = 0; i < files.length; i++) {
         formData.append("file"+i, files[i]);
