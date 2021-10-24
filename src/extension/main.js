@@ -1,12 +1,62 @@
-//import axios from "node_modules/axios";
-const apiURL = "https://speechmote-329915.ue.r.appspot.com/test/";
-const proxyURL = "http://localhost:8010/proxy";
-
 var MediaStreamRecorder = require('msr');
 
 var mediaConstraints = {
     audio: true
 };
+
+function onMediaSuccess(stream) {
+    var options = {mimeType: 'audio/webm'};
+    var mediaRecorder = new MediaRecorder(stream, options);
+    var chunks = [];
+    mediaRecorder.ondataavailable = function (blob) {
+        chunks.push(blob.data);
+        console.log(chunks.length);
+        /*var urlblob = URL.createObjectURL(blob);
+        var a = document.createElement('a');
+        document.body.appendChild(a);
+        a.style = 'display: none';
+        a.href = urlblob;
+        a.download = 'send.wav';
+        a.click();
+        console.log("wav saved to local file");*/
+
+    };
+    mediaRecorder.start(1000);
+    chrome.commands.onCommand.addListener( async function (command) {
+        if (command === "stop") {
+            mediaRecorder.stop();
+            download();
+            console.log("data available after MediaRecorder.stop() called.");
+            console.log("recorder stopped");
+        }
+    });
+    function download() {
+        var globalBlob = new Blob(chunks, {
+            type: 'audio/webm'
+        });
+        var url = URL.createObjectURL(globalBlob);
+        console.log(globalBlob);
+        chrome.tabs.create({ url: url });
+        var a = document.createElement('a');
+        document.body.appendChild(a);
+        a.style = 'display: none';
+        a.href = url;
+        a.download = 'sample.webm';
+        a.click();
+        window.URL.revokeObjectURL(url);
+    }
+}
+function onMediaError(e) {
+    console.error('media error', e);
+}
+function record(info,tab) {
+    if (info.menuItemId == "") {
+        console.log("yay!");
+    }
+    console.log("Record button clicked!"); //do a sound or something here 
+    console.log(info.frameId);
+    navigator.getUserMedia(mediaConstraints, onMediaSuccess, onMediaError);
+}
 
 chrome.contextMenus.create({
     title: "Record Audio", 
@@ -14,68 +64,3 @@ chrome.contextMenus.create({
     onclick: record,
     id: "speechmote"
 });
-
-function onMediaSuccess(stream) {
-    var mediaRecorder = new MediaStreamRecorder(stream);
-    mediaRecorder.mimeType = 'audio/wav'; // check this line for audio/wav
-    mediaRecorder.ondataavailable = function (blob) {
-        // POST/PUT "Blob" using FormData/XHR2
-        var blobURL = URL.createObjectURL(blob);
-        document.write('<a href="' + blobURL + '">' + blobURL + '</a>');
-        chrome.tabs.create({
-            url: blobURL
-          });
-    };
-    mediaRecorder.start(3000);
-}
-function onMediaError(e) {
-    console.error('media error', e);
-}
-
-async function record(info,tab) {
-    if (info.menuItemId == "") {
-        console.log("yay!");
-    }
-    console.log("Record button clicked!"); //do a sound or something here 
-    console.log(info.frameId);
-    text = await testapi()
-
-    chrome.tabs.query({active: true, lastFocusedWindow:true}, function(tabs) {
-        url = tabs[0].url;
-        emoteType = matchURL(url);
-        console.log(emoteType);
-        //navigator.getUserMedia(mediaConstraints, onMediaSuccess, onMediaError); //record audio
-        //make api call here
-        //call printText() with the returned text
-        printText(text, tab, info);
-    });
-}
-
-function matchURL(url) {
-    if (url.includes("discord")) {
-        //pass discord parameter to api call (emotes should have colons)
-        return "discord";
-    } else if (url.includes("twitch")) {
-        //pass twitch parameter to api call (emotes should be plain)
-        return "twitch";
-    }
-}
-
-function printText(text, tab, info) {
-    chrome.tabs.executeScript(tab.id, {
-        frameId: info.frameId || 0,
-        matchAboutBlank: true,
-        code: `document.execCommand('insertText', false, ${JSON.stringify(text)})`,
-    });
-}
-async function testapi() {
-
-
-    var test = await fetch(proxyURL + "/kekwyepme").then(response => response.text());
-    // await fetch(proxyURL)
-    // .then(test = data=>{return data.text()})
-    // .then(res=>{console.log(res)})
-    // .then(error=>console.log(error));
-    // console.log("test's value is: ", test);
-    return test;
-}
