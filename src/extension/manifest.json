@@ -7,5 +7,13 @@
         "page": "background.html",
         "persistent": true
     },
-    "permissions": ["contextMenus","tabs","activeTab"]
+    "permissions": ["contextMenus","tabs"],
+    "commands": {
+        "stop" : {
+            "suggested_key": {
+                 "default": "Alt+Shift+S" 
+            },
+            "description": "Stop Recording"
+        }
+    }
 }
