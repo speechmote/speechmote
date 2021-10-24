@@ -13,7 +13,7 @@ def transcribe_file(speech_file):
     audio = speech_v1p1beta1.RecognitionAudio(content=content)
     config = speech_v1p1beta1.RecognitionConfig(
         encoding=speech_v1p1beta1.RecognitionConfig.AudioEncoding.WEBM_OPUS,
-        audio_channel_count=2,
+        audio_channel_count=1,
         sample_rate_hertz=48000,
         language_code="en-US",
     )
