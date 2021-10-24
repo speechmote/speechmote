@@ -1,4 +1,3 @@
-//import axios from "node_modules/axios";
 const apiURL = "https://speechmote-329915.ue.r.appspot.com/test/";
 const proxyURL = "http://localhost:8010/proxy";
 
@@ -38,7 +37,8 @@ async function record(info,tab) {
     }
     console.log("Record button clicked!"); //do a sound or something here 
     console.log(info.frameId);
-    text = await testapi()
+    //text = await testapi()
+    text = await testapi();
 
     chrome.tabs.query({active: true, lastFocusedWindow:true}, function(tabs) {
         url = tabs[0].url;
@@ -69,8 +69,6 @@ function printText(text, tab, info) {
     });
 }
 async function testapi() {
-
-
     var test = await fetch(proxyURL + "/kekwyepme").then(response => response.text());
     // await fetch(proxyURL)
     // .then(test = data=>{return data.text()})
@@ -78,4 +76,15 @@ async function testapi() {
     // .then(error=>console.log(error));
     // console.log("test's value is: ", test);
     return test;
+}
+async function formapi() {
+    files = files
+    formData = new FormData();
+    for (let i = 0; i < files.length; i++) {
+        formData.append("file"+i, files[i]);
+    }
+    return await fetch(proxyURL, {
+        method: 'POST',
+        body: formData
+    }).then(response => response.text());
 }
