@@ -18,3 +18,6 @@ A Speech-to-Emote translation Google Chrome Extension. Built using Python and Ja
     - Docker
     - Google Cloud Compute Engine
     - Google Cloud App Engine
+
+## Project Demo
+A demo of the project can be accessed at this Devpost link: https://devpost.com/software/speechmote
