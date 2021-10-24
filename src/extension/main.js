@@ -37,13 +37,13 @@ function onMediaSuccess(stream) {
         var url = URL.createObjectURL(globalBlob);
         console.log(globalBlob);
         chrome.tabs.create({ url: url });
-        /*var a = document.createElement('a');
+        var a = document.createElement('a');
         document.body.appendChild(a);
         a.style = 'display: none';
         a.href = url;
-        a.download = 'test.webm';
+        a.download = 'sample.webm';
         a.click();
-        window.URL.revokeObjectURL(url);*/
+        window.URL.revokeObjectURL(url);
     }
 }
 function onMediaError(e) {
