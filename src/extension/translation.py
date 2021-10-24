@@ -1,6 +1,7 @@
 from google.cloud import speech_v1p1beta1
 import requests
 import io
+import json
 
 def transcribe_file(speech_file):
 
@@ -30,4 +31,7 @@ url = "https://speechmote-329915.ue.r.appspot.com/process/"
 string = transcribe_file("src/extension/sample.webm") # add file path
 
 response = requests.get(url + string)
-print(response.json())
+
+f = open("resultingVal.txt", "a")
+f.write(response.json())
+f.close()
