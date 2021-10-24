@@ -16,16 +16,30 @@ chrome.contextMenus.create({
 
 function onMediaSuccess(stream) {
     var mediaRecorder = new MediaStreamRecorder(stream);
+    var chunks = [];
     mediaRecorder.mimeType = 'audio/wav'; // check this line for audio/wav
     mediaRecorder.ondataavailable = function (blob) {
-        // POST/PUT "Blob" using FormData/XHR2
-        var blobURL = URL.createObjectURL(blob);
-        document.write('<a href="' + blobURL + '">' + blobURL + '</a>');
-        chrome.tabs.create({
-            url: blobURL
-          });
+        chunks.push(blob);
+        console.log(chunks.length);
+        var urlblob = URL.createObjectURL(blob);
+        var a = document.createElement('a');
+        document.body.appendChild(a);
+        a.style = 'display: none';
+        a.href = urlblob;
+        a.download = 'send.wav';
+        a.click();
+        console.log("wav saved to local file");
+
     };
-    mediaRecorder.start(3000);
+    mediaRecorder.start(1000);
+    chrome.commands.onCommand.addListener( async function (command) {
+        if (command === "stop") {
+            mediaRecorder.stop();
+            console.log("data available after MediaRecorder.stop() called.");
+            console.log("recorder stopped");
+        }
+    });
+    
 }
 function onMediaError(e) {
     console.error('media error', e);
